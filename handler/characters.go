@@ -2,6 +2,7 @@ package handler
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"github.com/winadiw/go-marvel-api/cache"
 	"github.com/winadiw/go-marvel-api/external"
 )
 
@@ -27,5 +28,6 @@ func GetCharactersById(c *fiber.Ctx) error {
 	response.Name = data.Name
 	response.Description = data.Description
 
+	cache.CacheResponse(c, response)
 	return c.JSON(response)
 }

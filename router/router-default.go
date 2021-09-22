@@ -5,6 +5,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/requestid"
 	"github.com/winadiw/go-marvel-api/handler"
+	"github.com/winadiw/go-marvel-api/middleware"
 	"github.com/winadiw/go-marvel-api/utils"
 )
 
@@ -24,5 +25,5 @@ func SetupRoutes(app *fiber.App) {
 
 	// Characters
 	characters := api.Group("/characters")
-	characters.Get("/:id", handler.GetCharactersById)
+	characters.Get("/:id", middleware.EnableCache, handler.GetCharactersById)
 }

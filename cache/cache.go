@@ -2,9 +2,12 @@ package cache
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
 	"time"
 
 	"github.com/go-redis/redis/v8"
+	"github.com/gofiber/fiber/v2"
 )
 
 // instance for accessing redis
@@ -12,29 +15,45 @@ var RDB *redis.Client
 
 var ctx = context.Background()
 
-// RedisCaching implements fiber.Storage
-type RedisCaching struct {
-}
-
-func (rc RedisCaching) Get(key string) ([]byte, error) {
+func Get(key string) ([]byte, error) {
 	return RDB.Get(ctx, key).Bytes()
 }
-
-func (rc RedisCaching) Set(key string, val []byte, ttl time.Duration) error {
+func Set(key string, val string, ttl time.Duration) error {
 	return RDB.Set(ctx, key, val, ttl).Err()
 }
 
-func (rc RedisCaching) Delete(key string) error {
+func Delete(key string) error {
 	RDB.Del(ctx, key)
 	return nil
 }
 
-func (rc RedisCaching) Reset() error {
+func Reset() error {
 	RDB.FlushAll(ctx)
 	return nil
 }
 
-func (rc RedisCaching) Close() error {
+func Close() error {
 	RDB.Close()
 	return nil
+}
+
+func CacheResponse(c *fiber.Ctx, response interface{}) {
+	key := c.Locals("cacheKey")
+	if key == nil {
+		fmt.Println("empty key")
+		return
+	}
+	responseJson, errJson := json.Marshal(response)
+	keyString := fmt.Sprintf("%s", key)
+
+	if errJson != nil {
+		fmt.Println(errJson)
+		return
+	}
+
+	fmt.Println(errJson)
+	err := Set(keyString, string(responseJson), 0)
+	if err != nil {
+		fmt.Println(err)
+	}
 }

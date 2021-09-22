@@ -1,9 +1,17 @@
 package utils
 
-import "github.com/gofiber/fiber/v2"
+type ResponseErrorData struct {
+	Code    int         `json:"code"`
+	Message string      `json:"message"`
+	Status  string      `json:"status"`
+	Data    interface{} `json:"data"`
+}
 
-func ResponseError(code int, message string, data interface{}) map[string]interface{} {
-	return fiber.Map{
-		"code":   code,
-		"status": "error", "message": message, "data": data}
+func ResponseError(code int, message string, data interface{}) *ResponseErrorData {
+	return &ResponseErrorData{
+		Code:    code,
+		Message: message,
+		Status:  "error",
+		Data:    data,
+	}
 }

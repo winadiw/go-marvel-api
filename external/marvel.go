@@ -66,7 +66,7 @@ func getAuthenticatedUrl(url string) string {
 }
 
 // makeGetRequest handles all repetitive code for get request
-func makeGetRequest(url string) ([]byte, map[string]interface{}) {
+func makeGetRequest(url string) ([]byte, *utils.ResponseErrorData) {
 	response, err := http.Get(getAuthenticatedUrl(url))
 
 	if err != nil {
@@ -94,7 +94,7 @@ func makeGetRequest(url string) ([]byte, map[string]interface{}) {
 }
 
 // MarvelGetCharacterById returns character by ID
-func MarvelGetCharacterById(ID string) (MarvelGetCharacterByIdResponse, map[string]interface{}) {
+func MarvelGetCharacterById(ID string) (MarvelGetCharacterByIdResponse, *utils.ResponseErrorData) {
 
 	response, errRequest := makeGetRequest("/v1/public/characters/" + ID)
 

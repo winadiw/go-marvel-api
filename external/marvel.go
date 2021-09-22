@@ -65,37 +65,49 @@ func getAuthenticatedUrl(url string) string {
 	return authUrl
 }
 
-// MarvelGetCharacterById returns character by ID
-func MarvelGetCharacterById(ID string) (MarvelGetCharacterByIdResponse, map[string]interface{}) {
-	response, err := http.Get(getAuthenticatedUrl("/v1/public/characters/" + ID))
+// makeGetRequest handles all repetitive code for get request
+func makeGetRequest(url string) ([]byte, map[string]interface{}) {
+	response, err := http.Get(getAuthenticatedUrl(url))
 
 	if err != nil {
 		fmt.Print(err.Error())
-		return MarvelGetCharacterByIdResponse{}, utils.ResponseError(http.StatusFailedDependency, "Network Error", err)
+		return nil, utils.ResponseError(http.StatusFailedDependency, "Network Error", err)
 	}
 
 	responseData, err := ioutil.ReadAll(response.Body)
 	if err != nil {
 		log.Fatal(err)
-		return MarvelGetCharacterByIdResponse{}, utils.ResponseError(http.StatusUnprocessableEntity, "Unable to read response data", err)
+		return nil, utils.ResponseError(http.StatusUnprocessableEntity, "Unable to read response data", err)
 	}
 
 	if response.StatusCode != http.StatusOK {
 		var errorResponse MarvelErrorResponse
 		err = json.Unmarshal(responseData, &errorResponse)
 		if err != nil {
-			return MarvelGetCharacterByIdResponse{}, utils.ResponseError(http.StatusUnprocessableEntity, "Unable to parse error response from marvel", err)
+			return nil, utils.ResponseError(http.StatusUnprocessableEntity, "Unable to parse error response from marvel", err)
 		}
 
-		return MarvelGetCharacterByIdResponse{}, utils.ResponseError(errorResponse.Code, errorResponse.Status, nil)
+		return nil, utils.ResponseError(errorResponse.Code, errorResponse.Status, nil)
+	}
+
+	return responseData, nil
+}
+
+// MarvelGetCharacterById returns character by ID
+func MarvelGetCharacterById(ID string) (MarvelGetCharacterByIdResponse, map[string]interface{}) {
+
+	response, errRequest := makeGetRequest("/v1/public/characters/" + ID)
+
+	if errRequest != nil {
+		return MarvelGetCharacterByIdResponse{}, errRequest
 	}
 
 	var responseObject MarvelGetCharacterByIdResponse
-	err = json.Unmarshal(responseData, &responseObject)
+	errMarshall := json.Unmarshal(response, &responseObject)
 
-	if err != nil {
-		log.Fatal(err)
-		return MarvelGetCharacterByIdResponse{}, utils.ResponseError(http.StatusUnprocessableEntity, "Unable to parse response", err)
+	if errMarshall != nil {
+		log.Fatal(errMarshall)
+		return MarvelGetCharacterByIdResponse{}, utils.ResponseError(http.StatusUnprocessableEntity, "Unable to parse response", errMarshall)
 	}
 
 	return responseObject, nil

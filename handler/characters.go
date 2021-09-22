@@ -14,8 +14,6 @@ func GetCharactersById(c *fiber.Ctx) error {
 
 	id := c.Params("id")
 
-	var response GetCharactersByIdResponse
-
 	marvelResponse, err := external.MarvelGetCharacterById(id)
 
 	if err != nil {
@@ -24,6 +22,7 @@ func GetCharactersById(c *fiber.Ctx) error {
 
 	data := marvelResponse.Data.Results[0]
 
+	var response GetCharactersByIdResponse
 	response.Id = int64(data.ID)
 	response.Name = data.Name
 	response.Description = data.Description

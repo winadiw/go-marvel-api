@@ -15,12 +15,15 @@ import (
 // SetupRoutes setup router api
 func SetupRoutes(app *fiber.App) {
 	// Middleware
+	// Use requestId to indicate a unique request
 	app.Use(requestid.New())
+
+	// Use redis as caching
 	app.Use(fibercache.New(fibercache.Config{
 		Next: func(c *fiber.Ctx) bool {
 			return c.Query("refresh") == "true"
 		},
-		Expiration:   30 * time.Minute,
+		Expiration:   15 * time.Minute,
 		CacheControl: true,
 		Storage:      cache.RedisCaching{},
 	}))

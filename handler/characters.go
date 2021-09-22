@@ -8,7 +8,7 @@ import (
 
 func GetCharactersById(c *fiber.Ctx) error {
 	type GetCharactersByIdResponse struct {
-		Id          int64
+		Id          int
 		Name        string
 		Description string
 	}
@@ -23,11 +23,11 @@ func GetCharactersById(c *fiber.Ctx) error {
 
 	data := marvelResponse.Data.Results[0]
 
-	var response GetCharactersByIdResponse
-	response.Id = int64(data.ID)
-	response.Name = data.Name
-	response.Description = data.Description
-
+	response := &GetCharactersByIdResponse{
+		Id:          data.ID,
+		Name:        data.Name,
+		Description: data.Description,
+	}
 	cache.CacheResponse(c, response)
 	return c.JSON(response)
 }

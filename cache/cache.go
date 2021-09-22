@@ -52,7 +52,7 @@ func CacheResponse(c *fiber.Ctx, response interface{}) {
 	}
 
 	fmt.Println(errJson)
-	err := Set(keyString, string(responseJson), 0)
+	err := Set(keyString, string(responseJson), 15*time.Minute)
 	if err != nil {
 		fmt.Println(err)
 	}

@@ -13,6 +13,7 @@ func getKey(c *fiber.Ctx) string {
 	return c.Path()
 }
 
+// EnableCache middleware to check cache if any
 func EnableCache(c *fiber.Ctx) error {
 	// Only cache GET method
 	if c.Method() != fiber.MethodGet {
@@ -25,9 +26,6 @@ func EnableCache(c *fiber.Ctx) error {
 	}
 
 	key := getKey(c)
-
-	fmt.Println(key)
-
 	result, err := cache.Get(key)
 
 	if err == redis.Nil {

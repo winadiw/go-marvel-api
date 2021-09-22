@@ -6,7 +6,7 @@ import (
 	"github.com/winadiw/go-marvel-api/external"
 )
 
-func GetCharactersById(c *fiber.Ctx) error {
+func GetCharacterById(c *fiber.Ctx) error {
 	type GetCharactersByIdResponse struct {
 		Id          int
 		Name        string
@@ -23,7 +23,7 @@ func GetCharactersById(c *fiber.Ctx) error {
 
 	data := marvelResponse.Data.Results[0]
 
-	response := &GetCharactersByIdResponse{
+	response := GetCharactersByIdResponse{
 		Id:          data.ID,
 		Name:        data.Name,
 		Description: data.Description,

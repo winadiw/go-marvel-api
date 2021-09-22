@@ -20,4 +20,7 @@ func SetupRoutes(app *fiber.App) {
 
 	api.Get("/status", handler.Status)
 
+	// Characters
+	characters := api.Group("/characters")
+	characters.Get("/:id", handler.GetCharactersById)
 }

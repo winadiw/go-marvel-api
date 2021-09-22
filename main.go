@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 
+	"github.com/winadiw/go-marvel-api/cache"
 	"github.com/winadiw/go-marvel-api/config"
 	"github.com/winadiw/go-marvel-api/router"
 
@@ -13,6 +14,8 @@ import (
 func main() {
 	app := fiber.New()
 	app.Use(cors.New())
+
+	cache.ConnectRedis()
 
 	router.SetupRoutes(app)
 

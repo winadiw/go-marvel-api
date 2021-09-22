@@ -16,7 +16,17 @@ func GetCharactersById(c *fiber.Ctx) error {
 
 	var response GetCharactersByIdResponse
 
-	external.MarvelGetCharactersById(id)
+	marvelResponse, err := external.MarvelGetCharacterById(id)
+
+	if err != nil {
+		return c.JSON(err)
+	}
+
+	data := marvelResponse.Data.Results[0]
+
+	response.Id = int64(data.ID)
+	response.Name = data.Name
+	response.Description = data.Description
 
 	return c.JSON(response)
 }

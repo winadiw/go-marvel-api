@@ -71,7 +71,7 @@ func makeGetRequest(url string) ([]byte, *utils.ResponseErrorData) {
 
 	if err != nil {
 		fmt.Print(err.Error())
-		return nil, utils.ResponseError(http.StatusFailedDependency, "Network Error", err)
+		return nil, utils.ResponseError(http.StatusFailedDependency, "Network Error", nil)
 	}
 
 	responseData, err := ioutil.ReadAll(response.Body)

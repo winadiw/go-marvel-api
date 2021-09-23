@@ -3,14 +3,28 @@ package middleware
 import (
 	"encoding/json"
 	"fmt"
+	"net/url"
 
 	"github.com/go-redis/redis/v8"
 	"github.com/gofiber/fiber/v2"
 	"github.com/winadiw/go-marvel-api/cache"
 )
 
+func stripQueryParam(inURL string, stripKey string) string {
+	u, err := url.Parse(inURL)
+	if err != nil {
+		fmt.Println("Not an url: " + inURL)
+		return inURL
+	}
+	q := u.Query()
+	q.Del(stripKey)
+	u.RawQuery = q.Encode()
+	return u.String()
+}
+
+// getKey returns key to use for caching each request
 func getKey(c *fiber.Ctx) string {
-	return c.Path()
+	return stripQueryParam(c.OriginalURL(), "refresh")
 }
 
 // EnableCache middleware to check cache if any
@@ -40,6 +54,7 @@ func EnableCache(c *fiber.Ctx) error {
 		return c.JSON(response)
 	}
 
+	// Store in locals for controller to set
 	c.Locals("cacheKey", key)
 
 	// Go to next middleware:

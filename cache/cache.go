@@ -40,7 +40,6 @@ func Close() error {
 func CacheResponse(c *fiber.Ctx, response interface{}) {
 	key := c.Locals("cacheKey")
 	if key == nil {
-		fmt.Println("empty key")
 		return
 	}
 	responseJson, errJson := json.Marshal(response)

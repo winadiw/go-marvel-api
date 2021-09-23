@@ -42,6 +42,9 @@ func EnableCache(c *fiber.Ctx) error {
 	key := getKey(c)
 	result, err := cache.Get(key)
 
+	// Store in locals for controller to set
+	c.Locals("cacheKey", key)
+
 	if err == redis.Nil {
 		fmt.Println("key does not exist")
 	} else if err != nil {
@@ -53,9 +56,6 @@ func EnableCache(c *fiber.Ctx) error {
 		json.Unmarshal(result, &response)
 		return c.JSON(response)
 	}
-
-	// Store in locals for controller to set
-	c.Locals("cacheKey", key)
 
 	// Go to next middleware:
 	return c.Next()

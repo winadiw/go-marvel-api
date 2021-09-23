@@ -77,6 +77,7 @@ func getAuthenticatedUrl(url string) string {
 
 // makeGetRequest handles all repetitive code for get request
 func makeGetRequest(url string) ([]byte, *utils.ResponseErrorData) {
+	fmt.Println("call url: " + url)
 	response, err := http.Get(url)
 
 	if err != nil {

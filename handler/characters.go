@@ -9,6 +9,7 @@ import (
 	"github.com/winadiw/go-marvel-api/utils"
 )
 
+// GetCharacterById handles incoming request for get character by id
 func GetCharacterById(c *fiber.Ctx) error {
 	type GetCharactersByIdResponse struct {
 		Id          int
@@ -35,9 +36,10 @@ func GetCharacterById(c *fiber.Ctx) error {
 	return c.JSON(response)
 }
 
+// GetCharacterList handles incoming request for get characters
 func GetCharacterList(c *fiber.Ctx) error {
-	limit := c.Params("limit", "100")
-	offset := c.Params("offset", "0")
+	limit := c.Query("limit", "100")
+	offset := c.Query("offset", "0")
 
 	limitInt, err := strconv.Atoi(limit)
 

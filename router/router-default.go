@@ -26,5 +26,5 @@ func SetupRoutes(app *fiber.App) {
 	// Characters
 	characters := api.Group("/characters")
 	characters.Get("/:id", middleware.EnableCache, handler.GetCharacterById)
-	characters.Get("", handler.GetCharacterList)
+	characters.Get("", middleware.EnableCache, handler.GetCharacterList)
 }

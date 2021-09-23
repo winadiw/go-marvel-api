@@ -18,6 +18,9 @@ func SetupRoutes(app *fiber.App) {
 	app.Get("/swagger.yml", func(c *fiber.Ctx) error {
 		return c.SendFile("./swagger.yml")
 	})
+	app.Get("/docs", func(c *fiber.Ctx) error {
+		return c.SendFile("./redoc-static.html")
+	})
 
 	api := app.Group("/api", logger.New(logger.Config{
 		Format:     utils.LoggerFormat(),

@@ -1,7 +1,25 @@
 # go-marvel-api
 
-# VSCode Enable Debugging
-## launch.json for Mac/Linux/Windows
+Go based Marvel API
+
+## Documentation
+
+OpenAPI documentation can be found in the [swagger.yaml](./swagger.yaml) file
+`http://localhost:8080`  
+Or can be accessed with UI on `http://localhost:8080/docs`
+
+## Running
+
+The appliction can be run with `go run`
+
+```
+➜ go run main.go
+
+curl localhost:8080/characters
+```
+
+## VSCode Enable Debugging
+### launch.json for Mac/Linux/Windows
 ```
 {
     // Use IntelliSense to learn about possible attributes.

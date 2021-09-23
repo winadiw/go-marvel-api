@@ -1,0 +1,152 @@
+swagger: "2.0"
+basePath: /api
+host: localhost:8080
+info:
+  version: 0.1.0
+  title: Golang Marvel API
+  description: |
+    This is a simple API build with Golang that connects to Marvel API
+  termsOfService: |
+    None
+  contact:
+    name: Winadi
+    email: winadiw@gmail.com
+    url: https://github.com/winadiw/go-marvel-api
+security:
+  - key: []
+consumes:
+  - application/json
+produces:
+  - application/json
+schemes:
+  - http
+  - https
+x-schemes:
+  - unix
+paths:
+  /characters:
+    get:
+      summary: Returns list of Character IDs
+      tags: ["Characters"]
+      operationId: getCharacters
+      parameters:
+        - in: query
+          name: limit
+          required: false
+          type: integer
+          minimum: 1
+          description: Limit for pagination
+        - name: offset
+          in: query
+          required: false
+          type: integer
+          minimum: 0
+          description: Offset for pagination
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/ArrayOfIds"
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/Error"
+  /characters/{id}:
+    get:
+      summary: Returns Character Object by ID
+      tags: ["Characters"]
+      operationId: getCharacterById
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: integer
+          description: Character ID
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/Character"
+        404:
+          description: NOT FOUND
+          schema:
+            $ref: "#/definitions/ErrorCharacterNotFound"
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/Error"
+definitions:
+  ArrayOfIds:
+    type: array
+    items:
+      type: integer
+    uniqueItems: true
+    example:
+      [
+        1011334,
+        1017100,
+        1009144,
+        1010699,
+        1009146,
+        1016823,
+        1009148,
+        1009149,
+        1010903,
+        1011266,
+      ]
+  Character:
+    type: object
+    description: Character object
+    required:
+      - id
+      - name
+      - description
+    properties:
+      id:
+        type: integer
+        format: int64
+        example: 1011127
+      name:
+        type: string
+        example: "Zodiak"
+      description:
+        type: string
+        example: "Twelve demons merged with Norman Harrison, who, soon after, adopted the guise of Zodiac and used his abilities to harness powers based on the astrological Zodiac."
+  Error:
+    type: object
+    required:
+      - code
+      - status
+      - message
+    properties:
+      code:
+        type: integer
+        format: int64
+        example: 422
+      message:
+        type: string
+        example: "Network Error"
+      status:
+        type: string
+        example: "error"
+      data:
+        type: object
+  ErrorCharacterNotFound:
+    type: object
+    required:
+      - code
+      - status
+      - message
+    properties:
+      code:
+        type: integer
+        format: int64
+        example: 404
+      message:
+        type: string
+        example: "We couldn't find that character"
+      status:
+        type: string
+        example: "error"
+      data:
+        type: object

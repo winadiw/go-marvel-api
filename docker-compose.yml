@@ -1,0 +1,25 @@
+version: "3.1"
+
+services:
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "6379:6379"
+
+  go-marvel-api:
+    env_file:
+      - .env
+    build:
+      context: .
+    depends_on:
+      - redis
+    environment:
+      - REDIS_ADDR=redis:6379
+      - REDIS_PASS=
+      - REDIS_DB=0
+      - HOST=127.0.0.1:8080
+      - ENV=development
+    restart: on-failure
+    ports:
+      - 8080:8080
+    command: sh -c "./go-marvel-api start"

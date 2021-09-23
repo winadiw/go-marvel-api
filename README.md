@@ -11,9 +11,10 @@ Go version 1.17
 
 ## Documentation
 
-OpenAPI documentation can be found in the [swagger.yaml](./swagger.yaml) file
-`http://localhost:8080`  
-Or can be accessed with UI on `http://localhost:8080/docs`  
+OpenAPI documentation can be found in the [swagger.yaml](./swagger.yaml) file  
+Or run the server first, then get from:
+ - YML: `http://localhost:8080/swagger.yml`
+ - UI: `http://localhost:8080/docs`
 
 Documentation is created using Library:
  - [go-swagger](https://www.gorillatoolkit.org/) 

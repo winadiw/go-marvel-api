@@ -19,7 +19,7 @@ Or run the server first, then get from:
 Documentation is created using Library:
  - [go-swagger](https://www.gorillatoolkit.org/) 
  - [redoc](https://github.com/Redocly/redoc)  
- - [redoc-cli](https://www.npmjs.com/package/redoc-cli)
+ - [redoc-cli](https://redoc.ly/docs/redoc/quickstart/cli/)
 
 Test swagger.yml:  
 `swagger validate ./swagger.yml`

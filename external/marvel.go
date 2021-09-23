@@ -34,17 +34,27 @@ type BaseMarvelResponseData struct {
 	Count  int `json:"count"`
 }
 
-type MarvelGetCharacterByIdResponse struct {
+type MarvelCharacterData struct {
+	ID          int    `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Modified    string `json:"modified"`
+}
+
+type MarvelGetCharactersResponse struct {
 	BaseMarvelResponse
 	Data struct {
 		BaseMarvelResponseData
-		Results []struct {
-			ID          int    `json:"id"`
-			Name        string `json:"name"`
-			Description string `json:"description"`
-			Modified    string `json:"modified"`
-		} `json:"results"`
+		Results []MarvelCharacterData `json:"results"`
 	} `json:"data"`
+}
+
+func (m MarvelGetCharactersResponse) IdList() []int {
+	var list []int
+	for _, user := range m.Data.Results {
+		list = append(list, user.ID)
+	}
+	return list
 }
 
 var baseUrl = config.Config("MARVEL_BASE_URL")
@@ -67,7 +77,7 @@ func getAuthenticatedUrl(url string) string {
 
 // makeGetRequest handles all repetitive code for get request
 func makeGetRequest(url string) ([]byte, *utils.ResponseErrorData) {
-	response, err := http.Get(getAuthenticatedUrl(url))
+	response, err := http.Get(url)
 
 	if err != nil {
 		fmt.Print(err.Error())
@@ -94,20 +104,41 @@ func makeGetRequest(url string) ([]byte, *utils.ResponseErrorData) {
 }
 
 // MarvelGetCharacterById returns character by ID
-func MarvelGetCharacterById(ID string) (MarvelGetCharacterByIdResponse, *utils.ResponseErrorData) {
+func MarvelGetCharacterById(ID string) (MarvelGetCharactersResponse, *utils.ResponseErrorData) {
 
-	response, errRequest := makeGetRequest("/v1/public/characters/" + ID)
+	response, errRequest := makeGetRequest(getAuthenticatedUrl("v1/public/characters/" + ID))
 
 	if errRequest != nil {
-		return MarvelGetCharacterByIdResponse{}, errRequest
+		return MarvelGetCharactersResponse{}, errRequest
 	}
 
-	var responseObject MarvelGetCharacterByIdResponse
+	var responseObject MarvelGetCharactersResponse
 	errMarshall := json.Unmarshal(response, &responseObject)
 
 	if errMarshall != nil {
 		log.Fatal(errMarshall)
-		return MarvelGetCharacterByIdResponse{}, utils.ResponseError(http.StatusUnprocessableEntity, "Unable to parse response", errMarshall)
+		return MarvelGetCharactersResponse{}, utils.ResponseError(http.StatusUnprocessableEntity, "Unable to parse response", errMarshall)
+	}
+
+	return responseObject, nil
+
+}
+
+// MarvelGetCharacters returns characters list
+func MarvelGetCharacters(limit, offset int) (MarvelGetCharactersResponse, *utils.ResponseErrorData) {
+
+	response, errRequest := makeGetRequest(getAuthenticatedUrl("v1/public/characters") + fmt.Sprintf("&limit=%d&offset=%d", limit, offset))
+
+	if errRequest != nil {
+		return MarvelGetCharactersResponse{}, errRequest
+	}
+
+	var responseObject MarvelGetCharactersResponse
+	errMarshall := json.Unmarshal(response, &responseObject)
+
+	if errMarshall != nil {
+		log.Fatal(errMarshall)
+		return MarvelGetCharactersResponse{}, utils.ResponseError(http.StatusUnprocessableEntity, "Unable to parse response", errMarshall)
 	}
 
 	return responseObject, nil

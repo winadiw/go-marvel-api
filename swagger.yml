@@ -2,7 +2,7 @@ swagger: "2.0"
 basePath: /api
 host: localhost:8080
 info:
-  version: 0.1.0
+  version: 1.0.0
   title: Golang Marvel API
   description: |
     This is a simple API build with Golang that connects to Marvel API

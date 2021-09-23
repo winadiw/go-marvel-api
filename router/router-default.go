@@ -15,6 +15,10 @@ func SetupRoutes(app *fiber.App) {
 	// Use requestId to indicate a unique request
 	app.Use(requestid.New())
 
+	app.Get("/swagger.yml", func(c *fiber.Ctx) error {
+		return c.SendFile("./swagger.yml")
+	})
+
 	api := app.Group("/api", logger.New(logger.Config{
 		Format:     utils.LoggerFormat(),
 		TimeFormat: "2006-01-02T15:04:05Z07:00",

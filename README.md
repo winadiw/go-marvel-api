@@ -44,6 +44,10 @@ The application can be run with `go run`
 curl localhost:8080/characters
 ```
 
+Or if you prefer docker, use Docker compose  
+running: `docker-compose up`  
+daemon mode: `docker-compose up -d`
+
 ## VSCode Enable Debugging
 ### launch.json for Mac/Linux/Windows
 ```

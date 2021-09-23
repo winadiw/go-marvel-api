@@ -49,6 +49,7 @@ type MarvelGetCharactersResponse struct {
 	} `json:"data"`
 }
 
+// IdList flattens id from character list
 func (m MarvelGetCharactersResponse) IdList() []int {
 	var list []int
 	for _, user := range m.Data.Results {

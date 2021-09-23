@@ -1,4 +1,4 @@
-version: "3.1"
+version: "3.9"
 
 services:
   redis:
@@ -17,9 +17,9 @@ services:
       - REDIS_ADDR=redis:6379
       - REDIS_PASS=
       - REDIS_DB=0
-      - HOST=127.0.0.1:8080
+      - HOST=:8080
       - ENV=development
     restart: on-failure
     ports:
-      - 8080:8080
+      - "8080:8080"
     command: sh -c "./go-marvel-api start"

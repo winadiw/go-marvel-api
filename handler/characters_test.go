@@ -6,6 +6,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/gofiber/fiber/v2"
 	"github.com/stretchr/testify/assert"
 	"github.com/winadiw/go-marvel-api/external"
 	"github.com/winadiw/go-marvel-api/utils"
@@ -40,6 +41,7 @@ func TestMarvelGetCharacterById(t *testing.T) {
 		}
 		return response, nil
 	}
+	app := fiber.New()
 	app.Get("/api/characters/:id", GetCharacterById)
 	req := httptest.NewRequest("GET", "/api/characters/1", nil)
 	resp, _ := app.Test(req, 1)
@@ -56,7 +58,7 @@ func TestMarvelGetCharacterById_NotFound(t *testing.T) {
 			Data:    nil,
 		}
 	}
-
+	app := fiber.New()
 	app.Get("/api/characters/:id", GetCharacterById)
 	req := httptest.NewRequest("GET", "/api/characters/1", nil)
 	resp, _ := app.Test(req, 1)
@@ -83,6 +85,7 @@ func TestMarvelGetCharacters(t *testing.T) {
 		}
 		return response, nil
 	}
+	app := fiber.New()
 	app.Get("/api/characters", GetCharacterList)
 	req := httptest.NewRequest("GET", "/api/characters?limit=50&offset=0", nil)
 	resp, _ := app.Test(req, 1)
@@ -109,6 +112,7 @@ func TestMarvelGetCharacterList_ErrorNetwork(t *testing.T) {
 			Data:    nil,
 		}
 	}
+	app := fiber.New()
 	app.Get("/api/characters", GetCharacterList)
 	req := httptest.NewRequest("GET", "/api/characters?limit=50&offset=0", nil)
 	resp, _ := app.Test(req, 1)
@@ -127,6 +131,7 @@ func TestMarvelGetCharacterList_ErrorNetwork(t *testing.T) {
 
 func TestMarvelGetCharacterList_LimitNotInteger(t *testing.T) {
 	external.MarvelService = &marvelServiceMock{}
+	app := fiber.New()
 	app.Get("/api/characters", GetCharacterList)
 	req := httptest.NewRequest("GET", "/api/characters?limit=abcd&offset=0", nil)
 	resp, _ := app.Test(req, 1)
@@ -145,6 +150,7 @@ func TestMarvelGetCharacterList_LimitNotInteger(t *testing.T) {
 
 func TestMarvelGetCharacterList_OffsetNotInteger(t *testing.T) {
 	external.MarvelService = &marvelServiceMock{}
+	app := fiber.New()
 	app.Get("/api/characters", GetCharacterList)
 	req := httptest.NewRequest("GET", "/api/characters?limit=0&offset=bcde", nil)
 	resp, _ := app.Test(req, 1)

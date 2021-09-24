@@ -8,9 +8,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var app = fiber.New()
-
 func TestStatus(t *testing.T) {
+	app := fiber.New()
 	app.Get("/api/status", Status)
 	tests := []struct {
 		name         string

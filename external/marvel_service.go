@@ -14,6 +14,17 @@ import (
 	"github.com/winadiw/go-marvel-api/utils"
 )
 
+var (
+	MarvelService marvelServiceInterface = &marvelService{}
+)
+
+type marvelService struct{}
+
+type marvelServiceInterface interface {
+	MarvelGetCharacterById(ID string) (MarvelGetCharactersResponse, *utils.ResponseErrorData)
+	MarvelGetCharacters(limit, offset int) (MarvelGetCharactersResponse, *utils.ResponseErrorData)
+}
+
 type MarvelErrorResponse struct {
 	Code   int    `json:"code"`
 	Status string `json:"status"`
@@ -82,7 +93,7 @@ func makeGetRequest(url string) ([]byte, *utils.ResponseErrorData) {
 	response, err := http.Get(url)
 
 	if err != nil {
-		fmt.Print(err.Error())
+		fmt.Print(err)
 		return nil, utils.ResponseError(http.StatusFailedDependency, "Network Error", nil)
 	}
 
@@ -106,7 +117,7 @@ func makeGetRequest(url string) ([]byte, *utils.ResponseErrorData) {
 }
 
 // MarvelGetCharacterById returns character by ID
-func MarvelGetCharacterById(ID string) (MarvelGetCharactersResponse, *utils.ResponseErrorData) {
+func (m *marvelService) MarvelGetCharacterById(ID string) (MarvelGetCharactersResponse, *utils.ResponseErrorData) {
 
 	response, errRequest := makeGetRequest(getAuthenticatedUrl("v1/public/characters/" + ID))
 
@@ -127,7 +138,7 @@ func MarvelGetCharacterById(ID string) (MarvelGetCharactersResponse, *utils.Resp
 }
 
 // MarvelGetCharacters returns characters list
-func MarvelGetCharacters(limit, offset int) (MarvelGetCharactersResponse, *utils.ResponseErrorData) {
+func (m *marvelService) MarvelGetCharacters(limit, offset int) (MarvelGetCharactersResponse, *utils.ResponseErrorData) {
 
 	response, errRequest := makeGetRequest(getAuthenticatedUrl("v1/public/characters") + fmt.Sprintf("&limit=%d&offset=%d", limit, offset))
 

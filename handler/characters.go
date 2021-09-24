@@ -19,7 +19,7 @@ func GetCharacterById(c *fiber.Ctx) error {
 
 	id := c.Params("id")
 
-	marvelResponse, err := external.MarvelGetCharacterById(id)
+	marvelResponse, err := external.MarvelService.MarvelGetCharacterById(id)
 
 	if err != nil {
 		return c.Status(err.Code).JSON(err)
@@ -54,7 +54,7 @@ func GetCharacterList(c *fiber.Ctx) error {
 			"Unable to parse offset to int", nil))
 	}
 
-	marvelResponse, errMarvel := external.MarvelGetCharacters(limitInt, offsetInt)
+	marvelResponse, errMarvel := external.MarvelService.MarvelGetCharacters(limitInt, offsetInt)
 
 	if errMarvel != nil {
 		return c.Status(errMarvel.Code).JSON(err)

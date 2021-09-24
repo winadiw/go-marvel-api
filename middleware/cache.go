@@ -42,7 +42,7 @@ func EnableCache(c *fiber.Ctx) error {
 	key := getKey(c)
 	result, err := cache.Get(key)
 
-	// Store in locals for controller to set
+	// Store in locals for handler to set
 	c.Locals("cacheKey", key)
 
 	if err == redis.Nil {

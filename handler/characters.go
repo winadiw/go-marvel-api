@@ -57,7 +57,7 @@ func GetCharacterList(c *fiber.Ctx) error {
 	marvelResponse, errMarvel := external.MarvelService.MarvelGetCharacters(limitInt, offsetInt)
 
 	if errMarvel != nil {
-		return c.Status(errMarvel.Code).JSON(err)
+		return c.Status(errMarvel.Code).JSON(errMarvel)
 	}
 
 	response := marvelResponse.IdList()

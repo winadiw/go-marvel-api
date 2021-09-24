@@ -31,7 +31,7 @@ Build `redoc-static.html`:
 `redoc-cli bundle ./swagger.yml`
 
 ## Prerequisite
-Before running, make sure to create `.env` file to get environment variables.  
+Before running, make sure to create and populate the content of `.env` file to get environment variables.  
 Use `.env.sample` as an example for the env file
 
 ## Running
@@ -47,6 +47,15 @@ curl localhost:8080/characters
 Or if you prefer docker, use Docker compose  
 running: `docker-compose up`  
 daemon mode: `docker-compose up -d`
+
+## Testing
+Unit Test
+```
+go test -v ./...
+
+# to check coverage
+go test -v ./... -coverprofile=coverage.out && go tool cover -html=coverage.out
+```
 
 ## VSCode Enable Debugging
 ### launch.json for Mac/Linux/Windows

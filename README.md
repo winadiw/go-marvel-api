@@ -30,9 +30,22 @@ Run swagger:
 Build `redoc-static.html`:  
 `redoc-cli bundle ./swagger.yml`
 
+Using `make`:  
+`make swagger-build`
+
 ## Prerequisite
 Before running, make sure to create and populate the content of `.env` file to get environment variables.  
 Use `.env.sample` as an example for the env file
+```
+HOST=127.0.0.1:8080
+ENV=development
+REDIS_ADDR=localhost:6379
+REDIS_PASS=
+REDIS_DB=0
+MARVEL_BASE_URL=https://gateway.marvel.com:443
+MARVEL_PRIVATE_KEY=
+MARVEL_PUBLIC_KEY=
+```
 
 ## Running
 
@@ -45,17 +58,21 @@ curl localhost:8080/characters
 ```
 
 Or if you prefer docker, use Docker compose  
-running: `docker-compose up`  
-daemon mode: `docker-compose up -d`
+running: `docker-compose up`
+daemon mode: `docker-compose up -d` or `make docker-up`
+stop docker: `docker-compose down` or `make docker-down` 
 
 ## Testing
 Unit Test
 ```
-go test -v ./...
+go test -v -short ./...
 
 # to check coverage
-go test -v ./... -coverprofile=coverage.out && go tool cover -html=coverage.out
+go test -v -short ./... -coverprofile=coverage.out && go tool cover -html=coverage.out
 ```
+
+Using `make`:  
+`make unit-test` or `make integration-test`
 
 ## VSCode Enable Debugging
 ### launch.json for Mac/Linux/Windows

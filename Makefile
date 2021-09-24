@@ -1,9 +1,9 @@
-.PHONY: dependency unit-test integration-test docker-up docker-down clear 
+.PHONY: dependency unit-test integration-test docker-up docker-down clear swagger-build
 
 dependency:
 	@go get -v ./...
 
-integration-test: docker-up dependency
+integration-test:
 	@go test -v ./...
 
 unit-test: dependency
@@ -16,3 +16,7 @@ docker-down:
 	@docker-compose down
 
 clear: docker-down
+
+swagger-build:
+	@swagger validate ./swagger.yml
+	@redoc-cli bundle ./swagger.yml
